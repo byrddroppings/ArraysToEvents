@@ -1,0 +1,48 @@
+<html>
+<head>
+	<style>
+		div { cursor: pointer; }
+	</style>
+</head>
+<body>
+	<div id="container" style="width:640px;height:480px;background-color:silver">
+		<div id="item" style="position:absolute;background-color:red;width:25px;height:25px"></div>
+	</div>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+	<script>
+
+		var item = document.querySelector('#item');
+		var container = document.querySelector('#container');
+
+		// var mousedowns = Rx.Observable.fromEvent(item, 'mousedown');
+		// var mousemoves = Rx.Observable.fromEvent(container, 'mousemove');
+		// var mouseups = Rx.Observable.fromEvent(container, 'mouseup');
+
+		var mousedowns = Rx.Observable.just().delay(1000);
+		var mouseups = Rx.Observable.just().delay(5000);
+
+		var delay = 1;
+
+		var mousemoves = Rx.Observable.from([
+			{ x: 10, y: 50 },
+			{ x: 50, y: 100 },
+			{ x: 100, y: 75 },
+			{ x: 25, y: 25 }
+		]).flatMap(function(pt) {
+			return Rx.Observable.just(pt).delay(delay++ * 1000);
+		});
+
+
+		var drags = mousedowns.flatMap(function() {
+			return mousemoves.takeUntil(mouseups);
+		});
+
+		drags.forEach(function(ev) {
+			console.log(ev);
+			item.style.top = ev.y + 'px';
+			item.style.left = ev.x + 'px';
+		});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+<head>
+	<style>
+		div { cursor: pointer; }
+	</style>
+</head>
+<body>
+	<div id="container" style="width:640px;height:480px;background-color:silver">
+		<div id="item" style="position:absolute;background-color:red;width:25px;height:25px"></div>
+	</div>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+	<script>
+
+		var item = document.querySelector('#item');
+		var container = document.querySelector('#container');
+
+		drags.forEach(function(ev) {
+			console.log(ev);
+			item.style.top = ev.y + 'px';
+			item.style.left = ev.x + 'px';
+		});
+
+	</script>
+</body>
+</html>

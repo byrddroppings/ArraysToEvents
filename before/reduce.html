@@ -1,0 +1,41 @@
+<html>
+<head>
+	<style>
+		div { margin: 20px; }
+	</style>
+</head>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone', skills: ['C#', 'ASP.NET', 'SQL'] },
+			{ firstName: 'Barney', lastName: 'Rubble', skills: ['C#', 'ASP.NET'] },
+			{ firstName: 'Wilma', lastName: 'Flintstone', skills: ['Mongo', 'Express', 'Angular', 'Node'] },
+			{ firstName: 'Betty', lastName: 'Rubble', skills: ['C#', 'ASP.NET', 'Node', 'Mongo'] }
+		];
+
+		Array.prototype.flatten = function() {
+			var result = [];
+
+			this.forEach(function(array) {
+				array.forEach(function(item) {
+					result.push(item);
+				});
+			});
+
+			return result;
+		};
+
+		var skills = people
+			.map(function(person) {
+				return person.skills;
+			})
+			.flatten();
+
+		// want a unique list!
+		skills.forEach(function(skill) {
+			console.log(skill);
+		});
+
+	</script>
+</body>
+</html>

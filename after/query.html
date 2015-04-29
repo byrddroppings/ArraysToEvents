@@ -1,0 +1,64 @@
+<html>
+<head>
+	<style>
+		div { margin: 20px; }
+	</style>
+</head>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone', skills: ['C#', 'ASP.NET', 'SQL'] },
+			{ firstName: 'Barney', lastName: 'Rubble', skills: ['C#', 'ASP.NET'] },
+			{ firstName: 'Wilma', lastName: 'Flintstone', skills: ['Mongo', 'Express', 'Angular', 'Node'] },
+			{ firstName: 'Betty', lastName: 'Rubble', skills: ['C#', 'ASP.NET', 'Node', 'Mongo'] }
+		];
+
+		Array.prototype.flatten = function() {
+			var result = [];
+
+			this.forEach(function(array) {
+				array.forEach(function(item) {
+					result.push(item);
+				});
+			});
+
+			return result;
+		};
+
+		Array.prototype.flatMap = function(mapper) {
+			return this.map(mapper).flatten();
+		};	
+
+		var report = people
+			.flatMap(function(p) {
+				return p.skills;
+			})
+			.reduce(function(acc, skill) {
+				if (acc.indexOf(skill) === -1)
+					acc.push(skill);
+
+				return acc;
+			}, [])
+			.map(function(skill) {
+				var skilled = people.filter(function(p) {
+					return p.skills.indexOf(skill) > -1;
+				}).map(function(p) {
+					return p.firstName + ' ' + p.lastName;
+				});
+
+				return {
+					skill: skill,
+					people: skilled
+				};
+			});
+
+		// want a report like this:
+		// [ { skill: 'Mongo', people: ['Wilma Flintstone', 'Betty Rubble' ] } ]	
+
+		report.forEach(function(r) {
+			console.log(r);
+		});
+
+	</script>
+</body>
+</html>

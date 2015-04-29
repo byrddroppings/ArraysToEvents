@@ -1,0 +1,21 @@
+<html>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone' },
+			{ firstName: 'Barney', lastName: 'Rubble' },
+			{ firstName: 'Wilma', lastName: 'Flintstone' },
+			{ firstName: 'Betty', lastName: 'Rubble' }
+		];
+
+		var flintstones = people.filter(function(person) {
+			return person.lastName == 'Flintstone';
+		});
+
+		flintstones.forEach(function(flintstone) {
+			console.log(flintstone.firstName + ' ' + flintstone.lastName);
+		});
+
+	</script>
+</body>
+</html>

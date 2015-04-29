@@ -1,0 +1,42 @@
+<html>
+<head>
+	<style>
+		div { margin: 20px; }
+	</style>
+</head>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone', skills: ['C#', 'ASP.NET', 'SQL'] },
+			{ firstName: 'Barney', lastName: 'Rubble', skills: ['C#', 'ASP.NET'] },
+			{ firstName: 'Wilma', lastName: 'Flintstone', skills: ['Mongo', 'Express', 'Angular', 'Node'] },
+			{ firstName: 'Betty', lastName: 'Rubble', skills: ['C#', 'ASP.NET', 'Node', 'Mongo'] }
+		];
+
+		Array.prototype.flatten = function() {
+			var results = [];
+
+			this.forEach(function(array) {
+				array.forEach(function(value) {
+					results.push(value);
+				});
+			});
+
+			return results;
+		};
+
+		Array.prototype.flatMap = function(mapper) {
+			this.map(mapper).flatten();
+		}
+
+		var skills = people.flatMap(function(person) {
+			return person.skills;
+		});
+
+		skills.forEach(function(skill) {
+			console.log(skill);
+		});
+
+	</script>
+</body>
+</html>

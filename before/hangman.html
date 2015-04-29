@@ -1,0 +1,114 @@
+<html>
+<head>
+	<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" type="text/css" />
+	<style>
+		div { text-align: center; padding: 20px;}
+		.good { background-color: green; color:white; }
+		.bad { background-color: red; color: white; }
+	</style>
+</head>
+<body>
+	<div id="phrase"></div>
+	<div id="badGuesses"></div>
+
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+	<script>
+		var phrase = 'BATES MOTEL';
+
+		var gameOver = new Rx.Subject();
+
+		// show the (?) for each letter
+		Rx.Observable.fromArray(phrase).forEach(function(ch) {
+			document.querySelector('#phrase').innerHTML += ch !== ' '
+				? '<span class="badge ' + ch + ' notGuessed">?</span>'
+				: '&nbsp;';
+		});
+
+		// get distinct keypresses 'A' to 'Z'
+		var guess = Rx.Observable
+			.fromEvent(document, 'keypress')
+			.takeUntil(gameOver)
+			.map(function(ev) {
+				return String.fromCharCode(ev.charCode).toUpperCase();
+			})
+			.filter(function(ch) {
+				return ch >= 'A' && ch <= 'Z';
+			})
+			.distinct();
+
+		// good guesses are letters that are in the phrase
+		var goodGuess = guess.filter(function(ch) { 
+			return phrase.indexOf(ch) > -1; 
+		});
+
+		// bad guesses are letters that are not in the phrase
+		var badGuess = guess.filter(function(ch) { 
+			return phrase.indexOf(ch) === -1; 
+		});
+
+		// for each good guess
+		// 1. show the letter
+		// 2. see if we've got them all
+		goodGuess.forEach(function(ch) {
+			$('.' + ch).each(function(element) {
+				$(this).text(ch).addClass('good').removeClass('notGuessed');
+			});
+
+			if (!$('.notGuessed').length)
+				gameOver.onNext(true);
+		});
+
+		// for each bad guess
+		// show it
+		badGuess.forEach(function(ch) {
+			$('#badGuesses').append('<span class="badge bad">'+ ch + '</span>');
+		});
+
+		// use scan (reduce) to count the bad guesses
+		// you lose when you get to 5 bad guesses
+		badGuess
+			.scan(0, function(count) { return (count + 1); })
+			.forEach(function(count) {
+				if (count >= 5) {
+					gameOver.onNext(false);
+				}
+			});
+
+		// create a game won observable
+		var gameWon = gameOver.filter(function(won) {
+			return won;
+		});
+
+		// show WINNER message
+		gameWon.forEach(function() {
+			document.querySelector('#phrase').innerHTML = '';
+			document.querySelector('#badGuesses').innerHTML = '';
+
+			Rx.Observable.fromArray('WINNER!').forEach(function(ch) {
+				document.querySelector('#phrase').innerHTML += ch !== ' '
+					? '<span class="badge good">' + ch + '</span>'
+					: '&nbsp;';
+			});
+		});
+
+		// create a game lost observable
+		var gameLost = gameOver.filter(function(won) {
+			return !won;
+		});
+
+		// show LOSER message
+		gameLost.forEach(function() {
+			document.querySelector('#phrase').innerHTML = '';
+			document.querySelector('#badGuesses').innerHTML = '';
+
+			Rx.Observable.fromArray('LOSER').forEach(function(ch) {
+				document.querySelector('#phrase').innerHTML += ch !== ' '
+					? '<span class="badge bad">' + ch + '</span>'
+					: '&nbsp;';
+				});
+		});
+
+	</script>
+</body>
+</html>

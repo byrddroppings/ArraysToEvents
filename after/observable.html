@@ -1,0 +1,44 @@
+<html>
+<head>
+	<style>
+		div { margin: 20px; }
+		button { padding: 10px; }
+	</style>
+</head>
+<body>
+	<div>
+		<button id="myButton">click here</button>
+		<button id="stopButton">stop</button>
+	</div>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+	<script>
+		var people =  Rx.Observable.from([
+			{ firstName: 'Fred', lastName: 'Flintstone', skills: ['C#', 'ASP.NET', 'SQL'] },
+			{ firstName: 'Barney', lastName: 'Rubble', skills: ['C#', 'ASP.NET'] },
+			{ firstName: 'Wilma', lastName: 'Flintstone', skills: ['Mongo', 'Express', 'Angular', 'Node'] },
+			{ firstName: 'Betty', lastName: 'Rubble', skills: ['C#', 'ASP.NET', 'Node', 'Mongo'] }
+		]);
+
+		people
+			.filter(function(p) {
+				return p.lastName === 'Flintstone';
+			})
+			.forEach(function(r) {
+				console.log(r);
+			});
+
+		var stop = Rx.Observable.fromEvent(document.getElementById('stopButton'), 'click');
+
+		var clicks = Rx.Observable.fromEvent(document.getElementById('myButton'), 'click').takeUntil(stop);
+
+		clicks.forEach(
+			function(ev) {
+				console.log(ev);
+			},
+			null,
+			function() { console.log('done');}
+			);
+
+	</script>
+</body>
+</html>

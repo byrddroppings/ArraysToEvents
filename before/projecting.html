@@ -1,0 +1,23 @@
+<html>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone' },
+			{ firstName: 'Barney', lastName: 'Rubble' },
+			{ firstName: 'Wilma', lastName: 'Flintstone' },
+			{ firstName: 'Betty', lastName: 'Rubble' }
+		];
+
+		var names = [];
+
+		people.forEach(function(person) {
+			names.push(person.firstName + ' ' + person.lastName);
+		});
+
+		names.forEach(function(name) {
+			console.log(name);
+		});
+
+	</script>
+</body>
+</html>

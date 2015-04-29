@@ -1,0 +1,30 @@
+<html>
+<head>
+	<style>
+		div { margin: 20px; }
+	</style>
+</head>
+<body>
+	<script>
+		var numbers = [[1,2,3], [4,5,6], [7,8,9]];
+
+		Array.prototype.flatten = function(arrayOfArrays) {
+			var result = [];
+
+			arrayOfArrays.forEach(function(array) {
+				array.forEach(function(n) {
+					result.push(n);
+				});
+			});
+
+			return result;
+		};
+
+		var flat = numbers.flatten(numbers);
+	
+		flat.forEach(function(n) {
+			console.log(n);
+		});
+	</script>
+</body>
+</html>

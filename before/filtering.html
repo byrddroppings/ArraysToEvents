@@ -1,0 +1,24 @@
+<html>
+<body>
+	<script>
+		var people =  [
+			{ firstName: 'Fred', lastName: 'Flintstone' },
+			{ firstName: 'Barney', lastName: 'Rubble' },
+			{ firstName: 'Wilma', lastName: 'Flintstone' },
+			{ firstName: 'Betty', lastName: 'Rubble' }
+		];
+
+		var flintstones = [];
+
+		people.forEach(function(person) {
+			if (person.lastName == 'Flintstone')
+				flintstones.push(person);
+		});
+
+		flintstones.forEach(function(flintstone) {
+			console.log(flintstone.firstName + ' ' + flintstone.lastName);
+		});
+
+	</script>
+</body>
+</html>
